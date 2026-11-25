@@ -1,0 +1,24 @@
+[Unit]
+Description=Restaurant Detection System
+Documentation=https://github.com/your-org/Resturant_Detection_system
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/restaurant
+Environment=CAMERA_SOURCE=rtsp://user:pass@192.168.1.64:554/stream
+Environment=SERVER_HOST=0.0.0.0
+Environment=SERVER_PORT=8000
+Environment=AUTH_USERNAME=admin
+Environment=AUTH_PASSWORD=change-this-strong-password
+ExecStart=/opt/restaurant/.venv/bin/python main.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

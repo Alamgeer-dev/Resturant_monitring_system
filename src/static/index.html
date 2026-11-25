@@ -15,6 +15,7 @@
   <section class="cards">
     <div class="card"><span>People</span><strong id="tot-people">0</strong></div>
     <div class="card"><span>Tables</span><strong id="tot-tables">0</strong></div>
+    <div class="card chair"><span>Chairs</span><strong id="tot-chairs">0</strong></div>
     <div class="card occ"><span>Occupied</span><strong id="tot-occupied">0</strong></div>
     <div class="card free"><span>Free</span><strong id="tot-free">0</strong></div>
     <div class="card served"><span>Served</span><strong id="tot-served">0</strong></div>
@@ -44,6 +45,8 @@
     </div>
   </main>
 
+  <!-- Set this to the backend URL when the UI is hosted separately (e.g. Vercel). -->
+  <script>window.RDS_API_BASE = window.RDS_API_BASE || "";</script>
   <script src="/static/app.js"></script>
 </body>
 </html>

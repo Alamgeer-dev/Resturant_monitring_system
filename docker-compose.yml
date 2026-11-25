@@ -1,0 +1,24 @@
+services:
+  restaurant:
+    build: .
+    container_name: restaurant-detection
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CAMERA_SOURCE: ${CAMERA_SOURCE:-0}
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 8000
+      MODEL_WEIGHTS: ${MODEL_WEIGHTS:-yolo11n.pt}
+      MODEL_DEVICE: ${MODEL_DEVICE:-auto}
+      SIMULATE: ${SIMULATE:-false}
+      TABLES_MODE: ${TABLES_MODE:-roi}
+      SERVE_MODE: ${SERVE_MODE:-both}
+      AUTH_USERNAME: ${AUTH_USERNAME:-}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-}
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./config.yaml:/app/config.yaml:ro
+    ports:
+      - "8000:8000"

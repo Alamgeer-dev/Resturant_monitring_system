@@ -9,6 +9,7 @@
 | ریسٹورنٹ میں کل لوگ | YOLO person detection + ByteTrack IDs |
 | ہر فرد کی entry time | جب بھی نیا track ID آئے، اُس وقت کو `people.first_seen` میں محفوظ |
 | ٹیبلز کی تعداد | COCO کا `dining table` class یا آپ کا training کیا ہوا `table` model |
+| کرسیاں (chairs) | COCO کا `chair` class (id 56)، الگ رنگ میں overlay + dashboard count |
 | ہر ٹیبل پر کتنے لوگ | شخص کے centre کو ٹیبل کے polygon/nearest table سے میچ |
 | Table free / occupied | اُس ٹیبل سے منسلک active tracks کی تعداد |
 | Served یا نہیں | `bowl/plate/cup/food` detection (auto) یا dashboard بٹن (manual) |

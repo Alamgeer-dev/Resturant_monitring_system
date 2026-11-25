@@ -20,6 +20,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "classes": {
         "person": ["person"],
         "table": ["dining table", "table"],
+        "chair": ["chair"],
         "serve": [
             "bowl", "cup", "fork", "knife", "spoon", "sandwich",
             "pizza", "cake", "bottle", "wine glass", "plate", "food",
@@ -33,9 +34,52 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "serve_mode": "both",
         "rois": [],
     },
-    "server": {"host": "0.0.0.0", "port": 8000, "mjpeg_fps": 12},
+    "server": {"host": "0.0.0.0", "port": 8000, "mjpeg_fps": 12, "cors_origins": []},
     "database": {"path": "data/restaurant.db"},
+    "auth": {"username": "", "password": ""},
 }
+
+
+def _set_path(cfg: Dict[str, Any], path: tuple, value: Any) -> None:
+    cur = cfg
+    for key in path[:-1]:
+        cur = cur.setdefault(key, {})
+    cur[path[-1]] = value
+
+
+def _as_bool(value: str) -> bool:
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _as_source(value: str):
+    text = str(value).strip()
+    return int(text) if text.lstrip("-").isdigit() else text
+
+
+def _apply_env(cfg: Dict[str, Any]) -> None:
+    """Environment overrides make Docker/VPS deployment possible without editing YAML."""
+    overrides = [
+        (("camera", "source"), "CAMERA_SOURCE", _as_source),
+        (("camera", "width"), "CAMERA_WIDTH", int),
+        (("camera", "height"), "CAMERA_HEIGHT", int),
+        (("camera", "fps_limit"), "CAMERA_FPS_LIMIT", float),
+        (("model", "weights"), "MODEL_WEIGHTS", str),
+        (("model", "device"), "MODEL_DEVICE", str),
+        (("model", "imgsz"), "MODEL_IMGSZ", int),
+        (("model", "conf"), "MODEL_CONF", float),
+        (("model", "simulate"), "SIMULATE", _as_bool),
+        (("tables", "mode"), "TABLES_MODE", str),
+        (("tables", "serve_mode"), "SERVE_MODE", str),
+        (("server", "host"), "SERVER_HOST", str),
+        (("server", "port"), "SERVER_PORT", int),
+        (("server", "mjpeg_fps"), "MJPEG_FPS", int),
+        (("database", "path"), "DB_PATH", str),
+        (("auth", "username"), "AUTH_USERNAME", str),
+        (("auth", "password"), "AUTH_PASSWORD", str),
+    ]
+    for path, env_name, cast in overrides:
+        if env_name in os.environ:
+            _set_path(cfg, path, cast(os.environ[env_name]))
 
 
 def _merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
@@ -55,6 +99,7 @@ def load_config(path: str = "config.yaml") -> Dict[str, Any]:
             user_cfg = yaml.safe_load(fh) or {}
         cfg = _merge(cfg, user_cfg)
 
+    _apply_env(cfg)
     db_dir = os.path.dirname(cfg["database"]["path"])
     if db_dir:
         os.makedirs(db_dir, exist_ok=True)

@@ -28,6 +28,7 @@ h2 { font-size: 15px; margin: 18px 0 8px; color: var(--muted); text-transform: u
 .card.occ strong { color: var(--amber); }
 .card.free strong { color: var(--green); }
 .card.served strong { color: var(--blue); }
+.card.chair strong { color: #c084fc; }
 main { display: grid; grid-template-columns: minmax(360px, 2fr) minmax(340px, 1fr); gap: 16px; margin-top: 10px; }
 .video-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
 #feed { width: 100%; border-radius: 6px; background: #000; display: block; }

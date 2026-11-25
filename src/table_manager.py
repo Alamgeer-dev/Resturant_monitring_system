@@ -57,6 +57,7 @@ class TableManager:
 
         self.person_names = set(cfg["classes"].get("person", []))
         self.table_names = set(cfg["classes"].get("table", []))
+        self.chair_names = set(cfg["classes"].get("chair", []))
         self.serve_names = set(cfg["classes"].get("serve", []))
 
         self.mode = tc.get("mode", "roi")
@@ -102,7 +103,7 @@ class TableManager:
     def _empty_state(self) -> Dict[str, Any]:
         return {
             "timestamp": now_iso(),
-            "totals": {"people": 0, "tables": 0, "occupied": 0, "free": 0, "served": 0},
+            "totals": {"people": 0, "tables": 0, "chairs": 0, "occupied": 0, "free": 0, "served": 0},
             "tables": [],
             "people": [],
         }
@@ -164,6 +165,7 @@ class TableManager:
         iso = now_iso()
 
         persons = [d for d in detections if d.class_name in self.person_names and d.track_id is not None]
+        chairs = [d for d in detections if d.class_name in self.chair_names]
         serve_dets = [d for d in detections if d.class_name in self.serve_names]
 
         active_ids = self._active_tables(detections, w, h)
@@ -294,6 +296,7 @@ class TableManager:
             "totals": {
                 "people": len(persons),
                 "tables": len(table_rows),
+                "chairs": len(chairs),
                 "occupied": occupied,
                 "free": len(table_rows) - occupied,
                 "served": served,
@@ -359,6 +362,8 @@ class TableManager:
                 color = (255, 60, 60)
             elif det.class_name in self.table_names:
                 color = (60, 160, 255)
+            elif det.class_name in self.chair_names:
+                color = (200, 80, 255)
             elif det.class_name in self.serve_names:
                 color = (60, 255, 160)
             else:

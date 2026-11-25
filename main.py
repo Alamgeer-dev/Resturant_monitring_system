@@ -144,7 +144,12 @@ def main() -> None:
 
     srv = cfg["server"]
     print(f"[INFO] Dashboard: http://localhost:{srv['port']}")
-    uvicorn.run(create_app(system), host=srv["host"], port=int(srv["port"]), log_level="info")
+    try:
+        # Single worker is required: camera loop + table state live in this process.
+        uvicorn.run(create_app(system), host=srv["host"], port=int(srv["port"]),
+                    workers=1, log_level="info")
+    finally:
+        system.stop()
 
 
 if __name__ == "__main__":

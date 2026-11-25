@@ -25,6 +25,7 @@ classes:
   # Names must match model class names. With yolo11n.pt these work as-is.
   person: [person]
   table: [dining table, table]
+  chair: [chair]
   serve: [bowl, cup, fork, knife, spoon, sandwich, pizza, cake, bottle, wine glass, plate, food]
 
 tables:
@@ -56,6 +57,14 @@ server:
   host: 0.0.0.0
   port: 8000
   mjpeg_fps: 12
+  # Needed only if frontend is hosted on Vercel and backend on another domain.
+  cors_origins: []
 
 database:
   path: data/restaurant.db
+
+# Optional HTTP Basic auth for the dashboard/APIs. Leave empty for local use.
+# For public deployment you can also use Cloudflare Access instead (recommended).
+auth:
+  username: ""
+  password: ""

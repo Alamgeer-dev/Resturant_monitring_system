@@ -73,7 +73,7 @@ class Detector:
         self.model = None
 
         wanted = set()
-        for key in ("person", "table", "serve"):
+        for key in ("person", "table", "chair", "serve"):
             wanted.update(cfg["classes"].get(key, []))
 
         if self.simulate:
