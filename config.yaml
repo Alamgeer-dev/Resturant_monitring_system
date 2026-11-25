@@ -1,0 +1,61 @@
+# ============================================================
+# Restaurant Detection System - Configuration
+# ============================================================
+
+camera:
+  # 0 = first webcam, "rtsp://user:pass@ip:554/stream" = IP camera,
+  # "data/video.mp4" = video file (for testing)
+  source: 0
+  width: 1280           # 0 = keep camera default
+  height: 720           # 0 = keep camera default
+  fps_limit: 0          # 0 = as fast as possible, e.g. 15 to limit CPU
+
+model:
+  # yolo11n.pt = COCO pretrained (person + dining table + bowl/cup ...)
+  # later use your trained model: models/restaurant_table.pt
+  weights: yolo11n.pt
+  device: auto          # auto | cpu | cuda | 0
+  imgsz: 640
+  conf: 0.45
+  iou: 0.50
+  tracker: bytetrack.yaml
+  simulate: false       # true = fake detections, no camera/model needed (UI test)
+
+classes:
+  # Names must match model class names. With yolo11n.pt these work as-is.
+  person: [person]
+  table: [dining table, table]
+  serve: [bowl, cup, fork, knife, spoon, sandwich, pizza, cake, bottle, wine glass, plate, food]
+
+tables:
+  # roi  = fixed table polygons below (recommended for a fixed camera)
+  # auto = use detected "dining table" boxes as tables
+  mode: roi
+  max_distance: 0.35    # max person->table distance (fraction of frame diagonal)
+  lose_grace_sec: 3.0   # person considered "left" after being missing this long
+  serve_delay_sec: 2.0  # serve object must stay this long to count as served
+  serve_mode: both      # manual | auto | both
+
+  # Polygon points are NORMALIZED: [x, y] in range 0..1.
+  # Use: python scripts/calibrate_rois.py --source 0  to generate these by clicking.
+  rois:
+    - id: T1
+      label: "Table 1"
+      polygon: [[0.10, 0.22], [0.35, 0.22], [0.35, 0.52], [0.10, 0.52]]
+    - id: T2
+      label: "Table 2"
+      polygon: [[0.55, 0.22], [0.80, 0.22], [0.80, 0.52], [0.55, 0.52]]
+    - id: T3
+      label: "Table 3"
+      polygon: [[0.10, 0.62], [0.35, 0.62], [0.35, 0.92], [0.10, 0.92]]
+    - id: T4
+      label: "Table 4"
+      polygon: [[0.55, 0.62], [0.80, 0.62], [0.80, 0.92], [0.55, 0.92]]
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  mjpeg_fps: 12
+
+database:
+  path: data/restaurant.db

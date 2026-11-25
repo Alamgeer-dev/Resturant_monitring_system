@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant Detection System</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Restaurant Detection System</h1>
+    <span id="clock" class="clock"></span>
+  </header>
+
+  <section class="cards">
+    <div class="card"><span>People</span><strong id="tot-people">0</strong></div>
+    <div class="card"><span>Tables</span><strong id="tot-tables">0</strong></div>
+    <div class="card occ"><span>Occupied</span><strong id="tot-occupied">0</strong></div>
+    <div class="card free"><span>Free</span><strong id="tot-free">0</strong></div>
+    <div class="card served"><span>Served</span><strong id="tot-served">0</strong></div>
+  </section>
+
+  <main>
+    <div class="video-wrap">
+      <h2>Live Camera</h2>
+      <img id="feed" src="/video_feed" alt="Live camera feed" />
+    </div>
+
+    <div class="right">
+      <h2>Tables</h2>
+      <div id="tables" class="table-grid"></div>
+
+      <h2>People in frame</h2>
+      <div class="panel">
+        <table id="people-table">
+          <thead><tr><th>ID</th><th>Entry</th><th>Duration</th><th>Table</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h2>Events</h2>
+      <div id="events" class="panel events"></div>
+      <p><a href="/api/export.csv" target="_blank">Download events CSV</a></p>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

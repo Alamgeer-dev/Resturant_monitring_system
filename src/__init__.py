@@ -1,0 +1,1 @@
+"""Restaurant detection system package."""
